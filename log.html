@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .login-container input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signin-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="user_name" required> <!-- Ensure name="user_name" -->
+        
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email_id" required> <!-- Ensure name="email_id" -->
+        
+            <button type="submit">Register</button>
+        </form>
+        
+        <div id="message"></div>
+
+        <div class="signin-link">
+            Already have an account? <a href="signin.html">Sign in</a>
+        </div>
+    </div>
+
+    <script>
+        // Ensure script executes after DOM content is loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to handle registration form submission
+            document.getElementById('registerForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const messageDiv = document.getElementById('message');
+
+                // Send a POST request to register a new user
+                fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_name: username, email_id: email })
+                })
+                .then(response => response.text())
+                .then(message => {
+                    // Show the response message
+                    messageDiv.innerHTML = `<p class="success-message">${message}</p>`;
+                    
+                    // Redirect to the success page after registration
+                    window.location.href = 'success.html'; // Change 'success.html' to your desired success page
+                })
+                .catch(error => {
+                    console.error('Error registering user:', error);
+                    messageDiv.innerHTML = `<p class="error-message">An error occurred during registration</p>`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
